@@ -222,6 +222,10 @@ Below is an example of prediction and the visualization it produces that helps i
 
 ![alt text](image-10.png)
 
+Below is the result of a synthesized prediction of entirely new sample data.
+
+![alt text](image-11.png)
+
 
 ## Usage
 
