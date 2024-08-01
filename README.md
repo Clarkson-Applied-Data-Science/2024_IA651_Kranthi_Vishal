@@ -165,17 +165,24 @@ This section provides detailed descriptions of the variables in the BRFSS datase
 
 ### Steps:
 1. **Splitting the Data**: The dataset is split into training and testing sets using the train_test_split function from scikit-learn with 20% of the data reserved for testing. The 80/20 split was chosen based on the size and distribution of the data. It helps the model generalize well to unseen data. The split was stratified using the `HAS_CANCER` target variable to maintain the balance of target variable over the training and testing sets.
+
 ![alt text](image-6.png)
+
 2. **Handling Class Imbalance**: SMOTE (Synthetic Minority Over-sampling Technique) is applied on the training_data to handle class imbalance of the target variable i:e `HAS_CANCER`. This was performed to prevent the model from being biased towards the majority class.
+
 ![alt text](image-7.png)
+
 3. **Dimensionality Reduction**: PCA (Principal Component Analysis) is used to reduce the dimensionality of the data. The target variance was 90% which was achieved using only 26 components which is a significant reduction in the total number of features i:e 63.
+
 ![alt text](image-8.png)
+
 4. **Model Selection**: Various machine learning models are selected for prediction. These were selected because of their well-known performance against categorical variables and classification of data. Which is exactly what this project aims to achieve. 
    - Logistic Regression
    - XGBoost
    - Catboost
    - Decision Tree
    - Random Forest
+
 5. **Hyper Parameter Tuning**: The hyper parameters of the best model were tuned using GridSearchCV with a total of 12 candidates.
 
 
@@ -202,30 +209,52 @@ The shape of the testing dataset is (89027,26).
 
 | Model               | Precision | Recall | F1 Score | Accuracy |
 |---------------------|-----------|--------|----------|----------|
-| Logistic Regression | 0.78      | 0.51   | 0.48     | 0.52     |
-| XGBoost             | 0.78      | 0.57   | 0.51     | 0.58     |
-| CatBoost            | 0.77      | 0.60   | 0.52     | 0.60     |
-| Decision Tree       | 0.76      | 0.61   | 0.52     | 0.61     |
-| Random Forest       | 0.76      | 0.61   | 0.52     | 0.61     |
+| Logistic Regression | 0.62      | 0.71   | 0.60     | 0.67     |
+| XGBoost             | 0.61      | 0.70   | 0.60     | 0.68     |
+| CatBoost            | 0.61      | 0.69   | 0.60     | 0.69     |
+| Decision Tree       | 0.57      | 0.60   | 0.57     | 0.71     |
+| Random Forest       | 0.60      | 0.63   | 0.60     | 0.75     |
 
-Based on above results and the balance of the target variable confusion matrix (catboost is more balanced than others), we determined that Catboost is the best model for this dataset.
+The main focus while building this predictive model was to identify as many cancer possibilities as possible even at the risk of mistaking someone for having cancer. So, to fulfill this objective we focused mainly on the `recall` .
+Also, as our dataset was highly unbalanced which means accuracy was not a good metric to determine the performance of the model.
 
-### Catboost Classifier Confusion Matrix
-![alt text](image-9.png)
+Based on above results and the balance of the target variable confusion matrix , we determined that `Logistic Regression` is the best model for this dataset.
+
+### Logistic Regression Confusion Matrix
+![alt text](image-13.png)
+
+### Hyper-Parameter Tuning
+We performed hyper parameter tuning to try and improve our logistic regression model using the below mentioned parameters.
+
+'C': [0.01, 0.1, 1, 10, 100],
+
+'penalty': ['l1', 'l2'],
+
+'solver': ['liblinear', 'saga']
+
+But the results we got after performing a gridsearchCV using a 5 Fold Cross-Validation Strategy were not satisfactory.
+
 
 **Note** : Although SVC is a good model to predict categorical data, due to the size of the data in current scenario it becomes computationally expensive and takes a very long time to run. Hence it was not used to train the model.
 
 ### Prediction Examples
 **LimeTabular Explainer** is a library that helps in visualizing the impact of each feature on the prediction.
 
-Below is an example of prediction and the visualization it produces that helps in determining which feature impacted the prediction.
+Below are two examples of prediction in test set and the visualization it produces that helps in determining which feature impacted the prediction.
+
+![alt text](image-14.png)
+![alt text](image-15.png)
+
+
+We have used an entirely new synthesized dataframe based on the existing data as Shown below.
+
+![alt text](image-9.png)
+
+Below is the result of the predictions using the synthesized dataframe.
 
 ![alt text](image-10.png)
 
-Below is the result of a synthesized prediction of entirely new sample data.
-
-![alt text](image-11.png)
-
+The predictions indicate that out of 3 new data points , 2 of them were predicted correctly of not having cancer.
 
 ## Usage
 
